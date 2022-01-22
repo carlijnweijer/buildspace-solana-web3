@@ -1,36 +1,35 @@
 const anchor = require("@project-serum/anchor");
 
+// Need the system program, will talk about this soon.
 const { SystemProgram } = anchor.web3;
 
 const main = async () => {
-  console.log("🚀 starting test...");
+  console.log("🚀 Starting test...");
 
-  // create and set the provider.
-  //We set it before but we needed to update it,
-  //so that it can communicate with our frontend
+  // Create and set the provider. We set it before but we needed to update it, so that it can communicate with our frontend!
   const provider = anchor.Provider.env();
   anchor.setProvider(provider);
 
   const program = anchor.workspace.Myepicproject;
 
-  // create an account keypair for our program to use
-  const baseAcccount = anchor.web3.Keypair.generate();
+  // Create an account keypair for our program to use.
+  const baseAccount = anchor.web3.Keypair.generate();
 
-  //call start_stuff_off and pass it the params it needs
-  const tx = await program.rpc.startStuffOff({
+  // Call start_stuff_off, pass it the params it needs!
+  let tx = await program.rpc.startStuffOff({
     accounts: {
-      baseAcccount: baseAcccount.publicKey,
+      baseAccount: baseAccount.publicKey,
       user: provider.wallet.publicKey,
-      SystemProgram: SystemProgram.programId,
+      systemProgram: SystemProgram.programId,
     },
-    signers: [baseAcccount],
+    signers: [baseAccount],
   });
 
-  console.log("📝 your transaction signature ", tx);
+  console.log("📝 Your transaction signature", tx);
 
-  // fetch data from the account
-  let account = await program.account.baseAccount.fetch(baseAcccount.publicKey);
-  console.log("👀 goal count:", account.totalGoals.toString());
+  // Fetch data from the account.
+  let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+  console.log("👀 GIF Count", account.totalGoals.toString());
 };
 
 const runMain = async () => {
