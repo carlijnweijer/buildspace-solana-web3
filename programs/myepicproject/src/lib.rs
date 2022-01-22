@@ -13,6 +13,13 @@ pub mod myepicproject {
     base_account.total_goals = 0;
     Ok(())
   }
+
+  pub fn add_goal(ctx: Context<AddGoal>) -> ProgramResult {
+      //get a reference to the account and increment total_goals
+      let base_account = &mut ctx.accounts.base_account;
+      base_account.total_goals += 1;
+      Ok(())
+  }
 }
 
 // attach certain variables to the StartStuffOff context
@@ -23,6 +30,14 @@ pub struct StartStuffOff<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
+}
+
+
+//sprecify what data you want in the AddGoal Context.
+#[derive(Accounts)]
+pub struct AddGoal<'info> {
+    #[account(mut)]
+    pub base_account: Account<'info, BaseAccount>,
 }
 
 // tell Solana what we want to store on this account

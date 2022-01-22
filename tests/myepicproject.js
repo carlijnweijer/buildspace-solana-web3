@@ -29,7 +29,17 @@ const main = async () => {
 
   // Fetch data from the account.
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log("👀 GIF Count", account.totalGoals.toString());
+  console.log("👀 Goal Count", account.totalGoals.toString());
+
+  //call add_goal
+  await program.rpc.addGoal({
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+    },
+  });
+
+  account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+  console.log("👀 Goal Count", account.totalGoals.toString());
 };
 
 const runMain = async () => {
