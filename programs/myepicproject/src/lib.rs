@@ -11,12 +11,13 @@ pub mod myepicproject {
     Ok(())
   }
 
-  pub fn add_goal(ctx: Context<AddGoal>, goal_goal: String, goal_deadline: String) -> ProgramResult {
+  pub fn add_goal(ctx: Context<AddGoal>,goal_id: String, goal_goal: String, goal_deadline: String) -> ProgramResult {
       let base_account = &mut ctx.accounts.base_account;
       let user = &mut ctx.accounts.user;
 
       //build the struct
       let item = ItemStruct {
+          goal_id: goal_id.to_string(),
           goal_goal: goal_goal.to_string(),
           goal_deadline: goal_deadline.to_string(),
           user_address: *user.to_account_info().key,
@@ -52,6 +53,7 @@ pub struct AddGoal<'info> {
 //tells Anchor how to serialize /deserialize the struct
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct ItemStruct {
+    pub goal_id: String,
     pub goal_goal: String,
     pub goal_deadline: String,
     pub user_address: Pubkey,

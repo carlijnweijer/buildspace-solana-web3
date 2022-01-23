@@ -24,12 +24,17 @@ const main = async () => {
   console.log("👀 oal Count", account.totalGoals.toString());
 
   // you'll need to now pass a goal to the function. you'll also need to pass in the user submitting
-  await program.rpc.addGoal("add_goal_here", "add_goal_deadline_here", {
-    accounts: {
-      baseAccount: baseAccount.publicKey,
-      user: provider.wallet.publicKey,
-    },
-  });
+  await program.rpc.addGoal(
+    "goal_id",
+    "add_goal_here",
+    "add_goal_deadline_here",
+    {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
+      },
+    }
+  );
 
   //call the account
   account = await program.account.baseAccount.fetch(baseAccount.publicKey);
