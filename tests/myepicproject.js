@@ -1,21 +1,15 @@
 const anchor = require("@project-serum/anchor");
 
-// Need the system program, will talk about this soon.
 const { SystemProgram } = anchor.web3;
 
 const main = async () => {
   console.log("🚀 Starting test...");
 
-  // Create and set the provider. We set it before but we needed to update it, so that it can communicate with our frontend!
   const provider = anchor.Provider.env();
   anchor.setProvider(provider);
 
   const program = anchor.workspace.Myepicproject;
-
-  // Create an account keypair for our program to use.
   const baseAccount = anchor.web3.Keypair.generate();
-
-  // Call start_stuff_off, pass it the params it needs!
   let tx = await program.rpc.startStuffOff({
     accounts: {
       baseAccount: baseAccount.publicKey,
@@ -24,22 +18,24 @@ const main = async () => {
     },
     signers: [baseAccount],
   });
-
   console.log("📝 Your transaction signature", tx);
 
-  // Fetch data from the account.
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log("👀 Goal Count", account.totalGoals.toString());
+  console.log("👀 oal Count", account.totalGoals.toString());
 
-  //call add_goal
-  await program.rpc.addGoal({
+  // you'll need to now pass a goal to the function. you'll also need to pass in the user submitting
+  await program.rpc.addGoal("add_goal_here", "add_goal_deadline_here", {
     accounts: {
       baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
     },
   });
 
+  //call the account
   account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log("👀 Goal Count", account.totalGoals.toString());
+
+  console.log("👀 Goal list", account.goalList);
 };
 
 const runMain = async () => {
